@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serviteca ADSO</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       PANTALLA LOGIN
+  ============================================================ -->
+  <section id="pantalla-login" class="pantalla pantalla-login-wrapper">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="logo-icon">🔧</span>
+        <h1>Serviteca <span class="logo-adso">ADSO</span></h1>
+      </div>
+      <p class="login-subtitle">Ingresa tus credenciales para continuar</p>
+      <div id="msg-login"></div>
+      <div class="form-group">
+        <label for="login-usuario">Usuario</label>
+        <input type="text" id="login-usuario" placeholder="Ingresa tu usuario" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="login-password">Contraseña</label>
+        <input type="password" id="login-password" placeholder="Ingresa tu contraseña" autocomplete="current-password" />
+      </div>
+      <button class="btn-primario btn-full" onclick="login()">Ingresar</button>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       NAVBAR
+  ============================================================ -->
+  <nav id="navbar" style="display:none;">
+    <div class="navbar-brand" onclick="mostrarPantalla('pantalla-bienvenida')">
+      <span>🔧</span> <strong>Serviteca ADSO</strong>
+    </div>
+    <div class="navbar-menus">
+
+      <!-- Clientes -->
+      <div class="menu-item" id="menu-clientes">
+        <button class="menu-btn" onclick="toggleSubmenu('menu-clientes')">
+          Clientes <span class="arrow">▾</span>
+        </button>
+        <div class="submenu">
+          <a href="#" onclick="irA('pantalla-clientes-agregar')">Agregar</a>
+          <a href="#" onclick="irA('pantalla-clientes-consultar')">Consultar</a>
+          <a href="#" onclick="irA('pantalla-clientes-listar')">Listar</a>
+        </div>
+      </div>
+
+      <!-- Carros -->
+      <div class="menu-item" id="menu-carros">
+        <button class="menu-btn" onclick="toggleSubmenu('menu-carros')">
+          Carros <span class="arrow">▾</span>
+        </button>
+        <div class="submenu">
+          <a href="#" onclick="irA('pantalla-carros-agregar')">Agregar</a>
+          <a href="#" onclick="irA('pantalla-carros-consultar')">Consultar</a>
+          <a href="#" onclick="irA('pantalla-carros-listar')">Listar</a>
+        </div>
+      </div>
+
+      <!-- Servicios -->
+      <div class="menu-item" id="menu-servicios">
+        <button class="menu-btn" onclick="toggleSubmenu('menu-servicios')">
+          Servicios <span class="arrow">▾</span>
+        </button>
+        <div class="submenu">
+          <a href="#" onclick="irA('pantalla-servicios-agregar')">Agregar</a>
+          <a href="#" onclick="irA('pantalla-servicios-consultar')">Consultar</a>
+          <a href="#" onclick="irA('pantalla-servicios-listar')">Listar</a>
+        </div>
+      </div>
+
+      <!-- Ayuda -->
+      <div class="menu-item">
+        <button class="menu-btn" onclick="irA('pantalla-ayuda')">Ayuda</button>
+      </div>
+
+    </div>
+    <button class="btn-salir" onclick="logout()">Salir</button>
+  </nav>
+
+  <!-- ============================================================
+       PANTALLA BIENVENIDA
+  ============================================================ -->
+  <section id="pantalla-bienvenida" class="pantalla" style="display:none;">
+    <div class="bienvenida-hero">
+      <div class="bienvenida-icon">🔧</div>
+      <h2>Bienvenido a <span class="color-naranja">Serviteca ADSO</span></h2>
+      <p>Sistema de gestión de clientes, vehículos y servicios automotrices.</p>
+      <p>Usa el menú superior para navegar entre las secciones.</p>
+    </div>
+    <div class="bienvenida-cards">
+      <div class="card-acceso" onclick="irA('pantalla-clientes-agregar')">
+        <span>👤</span>
+        <h3>Clientes</h3>
+        <p>Registra y consulta clientes</p>
+      </div>
+      <div class="card-acceso" onclick="irA('pantalla-carros-agregar')">
+        <span>🚗</span>
+        <h3>Carros</h3>
+        <p>Registra y consulta vehículos</p>
+      </div>
+      <div class="card-acceso" onclick="irA('pantalla-servicios-agregar')">
+        <span>🛠️</span>
+        <h3>Servicios</h3>
+        <p>Registra y consulta servicios</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA CLIENTES - AGREGAR
+  ============================================================ -->
+  <section id="pantalla-clientes-agregar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Agregar Cliente</h2>
+    <div id="msg-clientes-agregar"></div>
+    <form onsubmit="event.preventDefault(); guardarCliente();">
+      <div class="form-group">
+        <label for="cli-identificacion">Identificación *</label>
+        <input type="text" id="cli-identificacion" maxlength="20" placeholder="Ej: 1234567890" />
+      </div>
+      <div class="form-group">
+        <label for="cli-nombres">Nombres *</label>
+        <input type="text" id="cli-nombres" maxlength="100" placeholder="Ej: Juan Carlos" />
+      </div>
+      <div class="form-group">
+        <label for="cli-apellidos">Apellidos *</label>
+        <input type="text" id="cli-apellidos" maxlength="100" placeholder="Ej: Pérez Gómez" />
+      </div>
+      <div class="form-group">
+        <label for="cli-email">Correo electrónico *</label>
+        <input type="text" id="cli-email" maxlength="150" placeholder="Ej: juan@correo.com" />
+      </div>
+      <div class="form-group">
+        <label for="cli-celular">Celular (10 dígitos) *</label>
+        <input type="text" id="cli-celular" maxlength="10" placeholder="Ej: 3001234567" />
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primario">Guardar Cliente</button>
+        <button type="button" class="btn-secundario" onclick="limpiarFormCliente()">Limpiar</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA CLIENTES - CONSULTAR
+  ============================================================ -->
+  <section id="pantalla-clientes-consultar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Consultar Cliente</h2>
+    <div class="busqueda-bar">
+      <div class="form-group form-group-inline">
+        <label for="consultar-cli-id">Identificación del cliente</label>
+        <input type="text" id="consultar-cli-id" placeholder="Ingresa la identificación" maxlength="20" />
+      </div>
+      <button class="btn-primario" onclick="consultarCliente()">Buscar</button>
+    </div>
+    <div id="msg-clientes-consultar"></div>
+    <div id="resultado-cliente"></div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA CLIENTES - LISTAR
+  ============================================================ -->
+  <section id="pantalla-clientes-listar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Listado de Clientes</h2>
+    <div id="msg-clientes-listar"></div>
+    <div id="tabla-clientes"></div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA CARROS - AGREGAR
+  ============================================================ -->
+  <section id="pantalla-carros-agregar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Agregar Vehículo</h2>
+    <div id="msg-carros-agregar"></div>
+    <form onsubmit="event.preventDefault(); guardarCarro();">
+      <div class="form-group">
+        <label for="car-placa">Placa (3 letras + 3 dígitos) *</label>
+        <input type="text" id="car-placa" maxlength="6" placeholder="Ej: ABC123" />
+      </div>
+      <div class="form-group">
+        <label for="car-marca">Marca *</label>
+        <input type="text" id="car-marca" maxlength="50" placeholder="Ej: Chevrolet" />
+      </div>
+      <div class="form-group">
+        <label for="car-modelo">Modelo *</label>
+        <input type="text" id="car-modelo" maxlength="50" placeholder="Ej: Spark 2022" />
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primario">Guardar Vehículo</button>
+        <button type="button" class="btn-secundario" onclick="limpiarFormCarro()">Limpiar</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA CARROS - CONSULTAR
+  ============================================================ -->
+  <section id="pantalla-carros-consultar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Consultar Vehículo</h2>
+    <div class="busqueda-bar">
+      <div class="form-group form-group-inline">
+        <label for="consultar-car-placa">Placa del vehículo</label>
+        <input type="text" id="consultar-car-placa" placeholder="Ej: ABC123" maxlength="6" />
+      </div>
+      <button class="btn-primario" onclick="consultarCarro()">Buscar</button>
+    </div>
+    <div id="msg-carros-consultar"></div>
+    <div id="resultado-carro"></div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA CARROS - LISTAR
+  ============================================================ -->
+  <section id="pantalla-carros-listar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Listado de Vehículos</h2>
+    <div id="msg-carros-listar"></div>
+    <div id="tabla-carros"></div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA SERVICIOS - AGREGAR
+  ============================================================ -->
+  <section id="pantalla-servicios-agregar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Agregar Servicio</h2>
+    <div id="msg-servicios-agregar"></div>
+    <form onsubmit="event.preventDefault(); guardarServicio();">
+      <div class="form-group">
+        <label for="srv-placa">Placa del vehículo *</label>
+        <input type="text" id="srv-placa" maxlength="6" placeholder="Ej: ABC123" />
+      </div>
+      <div class="form-group">
+        <label for="srv-identificacion">Identificación del cliente *</label>
+        <input type="text" id="srv-identificacion" maxlength="20" placeholder="Ej: 1234567890" />
+      </div>
+      <div class="form-group">
+        <label for="srv-fecha">Fecha del servicio *</label>
+        <input type="date" id="srv-fecha" />
+      </div>
+      <div class="form-group">
+        <label for="srv-tipo">Tipo de servicio *</label>
+        <select id="srv-tipo">
+          <option value="">-- Selecciona un servicio --</option>
+          <option value="Cambio de aceite">Cambio de aceite</option>
+          <option value="Sincronización">Sincronización</option>
+          <option value="Alineación">Alineación</option>
+          <option value="Lavado">Lavado</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primario">Guardar Servicio</button>
+        <button type="button" class="btn-secundario" onclick="limpiarFormServicio()">Limpiar</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA SERVICIOS - CONSULTAR
+  ============================================================ -->
+  <section id="pantalla-servicios-consultar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Consultar Servicios por Vehículo</h2>
+    <div class="busqueda-bar">
+      <div class="form-group form-group-inline">
+        <label for="consultar-srv-placa">Placa del vehículo</label>
+        <input type="text" id="consultar-srv-placa" placeholder="Ej: ABC123" maxlength="6" />
+      </div>
+      <button class="btn-primario" onclick="consultarServicios()">Buscar</button>
+    </div>
+    <div id="msg-servicios-consultar"></div>
+    <div id="resultado-servicios"></div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA SERVICIOS - LISTAR
+  ============================================================ -->
+  <section id="pantalla-servicios-listar" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Listado de Servicios</h2>
+    <div id="msg-servicios-listar"></div>
+    <div id="tabla-servicios"></div>
+  </section>
+
+  <!-- ============================================================
+       PANTALLA AYUDA
+  ============================================================ -->
+  <section id="pantalla-ayuda" class="pantalla" style="display:none;">
+    <h2 class="pantalla-titulo">Ayuda</h2>
+    <p class="ayuda-intro">Bienvenido al módulo de ayuda de <strong>Serviteca ADSO</strong>. Aquí encontrarás una guía de cada sección del sistema.</p>
+
+    <div class="ayuda-seccion">
+      <h3>🔐 Inicio de sesión</h3>
+      <ol>
+        <li>Ingresa tu <strong>usuario</strong> y <strong>contraseña</strong> en el formulario de acceso.</li>
+        <li>Haz clic en el botón <strong>Ingresar</strong>.</li>
+        <li>Si las credenciales son incorrectas, verás un mensaje de error.</li>
+        <li>Tras <strong>5 intentos fallidos</strong>, el sistema se bloqueará por <strong>60 segundos</strong>.</li>
+        <li>La sesión expira automáticamente al cerrar la pestaña del navegador.</li>
+      </ol>
+    </div>
+
+    <div class="ayuda-seccion">
+      <h3>👤 Módulo Clientes</h3>
+      <h4>Agregar cliente:</h4>
+      <ol>
+        <li>Navega a <em>Clientes → Agregar</em>.</li>
+        <li>Completa todos los campos: Identificación, Nombres, Apellidos, Correo y Celular.</li>
+        <li>La <strong>identificación</strong> debe ser alfanumérica, máximo 20 caracteres y no puede estar duplicada.</li>
+        <li>El <strong>correo</strong> debe tener formato válido (ej: usuario@dominio.com).</li>
+        <li>El <strong>celular</strong> debe tener exactamente 10 dígitos numéricos.</li>
+        <li>Haz clic en <strong>Guardar Cliente</strong>.</li>
+      </ol>
+      <h4>Consultar cliente:</h4>
+      <ol>
+        <li>Navega a <em>Clientes → Consultar</em>.</li>
+        <li>Ingresa la identificación del cliente y haz clic en <strong>Buscar</strong>.</li>
+        <li>Si existe, verás una tarjeta con sus datos.</li>
+      </ol>
+      <h4>Listar clientes:</h4>
+      <ol>
+        <li>Navega a <em>Clientes → Listar</em>.</li>
+        <li>Se mostrará una tabla con todos los clientes ordenados por apellidos y nombres.</li>
+      </ol>
+    </div>
+
+    <div class="ayuda-seccion">
+      <h3>🚗 Módulo Carros</h3>
+      <h4>Agregar vehículo:</h4>
+      <ol>
+        <li>Navega a <em>Carros → Agregar</em>.</li>
+        <li>Ingresa la <strong>placa</strong> con formato: 3 letras seguidas de 3 dígitos (ej: ABC123).</li>
+        <li>La placa se guardará en <strong>mayúsculas</strong> automáticamente.</li>
+        <li>Completa la <strong>Marca</strong> y el <strong>Modelo</strong>.</li>
+        <li>Haz clic en <strong>Guardar Vehículo</strong>.</li>
+      </ol>
+      <h4>Consultar vehículo:</h4>
+      <ol>
+        <li>Navega a <em>Carros → Consultar</em>.</li>
+        <li>Ingresa la placa del vehículo (sin distinción de mayúsculas) y haz clic en <strong>Buscar</strong>.</li>
+      </ol>
+      <h4>Listar vehículos:</h4>
+      <ol>
+        <li>Navega a <em>Carros → Listar</em>.</li>
+        <li>Se mostrará una tabla con todos los vehículos registrados.</li>
+      </ol>
+    </div>
+
+    <div class="ayuda-seccion">
+      <h3>🛠️ Módulo Servicios</h3>
+      <h4>Agregar servicio:</h4>
+      <ol>
+        <li>Navega a <em>Servicios → Agregar</em>.</li>
+        <li>Ingresa la <strong>placa del vehículo</strong> (debe estar registrado previamente).</li>
+        <li>Ingresa la <strong>identificación del cliente</strong> (debe estar registrado previamente).</li>
+        <li>Selecciona la <strong>fecha</strong> del servicio (no puede ser una fecha futura).</li>
+        <li>Selecciona el <strong>tipo de servicio</strong> en el menú desplegable.</li>
+        <li>Haz clic en <strong>Guardar Servicio</strong>.</li>
+      </ol>
+      <h4>Consultar servicios por vehículo:</h4>
+      <ol>
+        <li>Navega a <em>Servicios → Consultar</em>.</li>
+        <li>Ingresa la placa del vehículo y haz clic en <strong>Buscar</strong>.</li>
+        <li>Verás una tabla con todos los servicios realizados a ese vehículo.</li>
+      </ol>
+      <h4>Listar todos los servicios:</h4>
+      <ol>
+        <li>Navega a <em>Servicios → Listar</em>.</li>
+        <li>Se mostrará una tabla con todos los servicios registrados en el sistema.</li>
+      </ol>
+    </div>
+
+    <div class="ayuda-seccion">
+      <h3>🚪 Cerrar sesión</h3>
+      <ol>
+        <li>Haz clic en el botón <strong>Salir</strong> ubicado en la esquina derecha del menú superior.</li>
+        <li>La sesión se cerrará y serás redirigido al formulario de login.</li>
+      </ol>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
